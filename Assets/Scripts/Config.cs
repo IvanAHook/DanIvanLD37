@@ -8,7 +8,7 @@ public class Config : MonoBehaviour
 
     private static Config _config;
 
-    public Config Instance
+    public static Config Instance
     {
         get { return _config; }
     }

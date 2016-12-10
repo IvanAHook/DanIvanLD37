@@ -39,12 +39,18 @@ public class CharacterMovement : MonoBehaviour
 
 		if (Input.GetMouseButtonDown(0))
 		{
-			if (hit.collider != null && hit.collider.gameObject.layer != 5)
+			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
+				if (TurnManager.RemainingTurns < 1)
+				{
+					Debug.Log("YO out of turns fool, go find food lol!");
+					return;
+				}
 				StopAllCoroutines();
 				StartCoroutine(MoveTo(hit.transform.position, () =>
 				{
-					Debug.Log("YOYOYO WE AT THE PLACE :D");
+					hit.collider.GetComponent<PopupItem>().Interract();
+					TurnManager.SpendTurn();
 				}));
 			}
 		}
@@ -55,7 +61,6 @@ public class CharacterMovement : MonoBehaviour
 		var remainingDistance = (Vector2) transform.position - destination;
 		var direction = remainingDistance.normalized;
 
-		Debug.Log(Mathf.Abs(remainingDistance.x));
 		if (direction.x > 0 && _spriteRenderer.flipX)
 		{
 			_spriteRenderer.flipX = false;

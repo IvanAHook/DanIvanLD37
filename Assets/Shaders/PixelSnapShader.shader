@@ -100,23 +100,22 @@
 					//float average = (c.r + c.g + c.b) / 3;
 
 					//c.r = average;
-					//c.g = mul(average, c.g);
-					//c.b = mul(average, c.b);
+					//c.g = average;
+					//c.b = average;
 
-					if (_Outline > 0 && c.a != 0)
+					c.rgb *= c.a;
+
+					if (_Outline > 0 && c.a == 0)
 					{
 						fixed4 pixelUp = tex2D(_MainTex, IN.texcoord + fixed2(0, _MainTex_TexelSize.y));
 						fixed4 pixelDown = tex2D(_MainTex, IN.texcoord - fixed2(0, _MainTex_TexelSize.y));
 						fixed4 pixelRight = tex2D(_MainTex, IN.texcoord + fixed2(_MainTex_TexelSize.x, 0));
 						fixed4 pixelLeft = tex2D(_MainTex, IN.texcoord - fixed2(_MainTex_TexelSize.x, 0));
 
-						// If one of the neighbouring pixels is invisible, we render an outline.
-						if (pixelUp.a * pixelDown.a * pixelRight.a * pixelLeft.a == 0) {
-							c.rgba = fixed4(1, 1, 1, 1) * _OutlineColor;
+						if (pixelUp.a + pixelDown.a + pixelRight.a + pixelLeft.a != 0) {
+							c.rgba = fixed4(1, 0, 0, 1) * _OutlineColor;
 						}
 					}
-
-					c.rgb *= c.a;
 
 					return c;
 				}

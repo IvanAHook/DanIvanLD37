@@ -5,6 +5,10 @@
 		[PerRendererData]_MainTex("Sprite Texture", 2D) = "white" {}
 		_Color("Tint", Color) = (1,1,1,1)
 		_pixelsPerUnit("Pixels Per Unit", Float) = 16
+
+		// Add values to determine if outlining is enabled and outline color.
+		[PerRendererData] _Outline ("Outline", Float) = 0
+		[PerRendererData] _OutlineColor("Outline Color", Color) = (1,1,1,1)
 	}
 
 		SubShader
@@ -33,65 +37,90 @@
 				#include "UnityCG.cginc"
 
 				struct appdata_t
-			{
-				float4 vertex   : POSITION;
-				float4 color    : COLOR;
-				float2 texcoord : TEXCOORD0;
-			};
+				{
+					float4 vertex   : POSITION;
+					float4 color    : COLOR;
+					float2 texcoord : TEXCOORD0;
+				};
 
-			struct v2f
-			{
-				float4 vertex   : SV_POSITION;
-				fixed4 color : COLOR;
-				float2 texcoord  : TEXCOORD0;
-			};
+				struct v2f
+				{
+					float4 vertex   : SV_POSITION;
+					fixed4 color : COLOR;
+					float2 texcoord  : TEXCOORD0;
+				};
 
-			fixed4 _Color;
-			float _pixelsPerUnit;
+				fixed4 _Color;
+				float _pixelsPerUnit;
+				float _Outline;
+				fixed4 _OutlineColor;
 
-			float4 AlignToPixelGrid(float4 vertex)
-			{
-				float4 worldPos = mul(unity_ObjectToWorld, vertex);
+				float4 AlignToPixelGrid(float4 vertex)
+				{
+					float4 worldPos = mul(unity_ObjectToWorld, vertex);
 
-				worldPos.x = floor(worldPos.x * _pixelsPerUnit + 0.5) / _pixelsPerUnit;
-				worldPos.y = floor(worldPos.y * _pixelsPerUnit + 0.5) / _pixelsPerUnit;
+					worldPos.x = floor(worldPos.x * _pixelsPerUnit + 0.5) / _pixelsPerUnit;
+					worldPos.y = floor(worldPos.y * _pixelsPerUnit + 0.5) / _pixelsPerUnit;
 
-				return mul(unity_WorldToObject, worldPos);
-			}
+					return mul(unity_WorldToObject, worldPos);
+				}
 
-			v2f vert(appdata_t IN)
-			{
-				float4 alignedPos = AlignToPixelGrid(IN.vertex);
+				v2f vert(appdata_t IN)
+				{
+					float4 alignedPos = AlignToPixelGrid(IN.vertex);
 
-				v2f OUT;
-				OUT.vertex = mul(UNITY_MATRIX_MVP, alignedPos);
-				OUT.texcoord = IN.texcoord;
-				OUT.color = IN.color * _Color;
+					v2f OUT;
 
-				return OUT;
-			}
+					OUT.vertex = mul(UNITY_MATRIX_MVP, alignedPos);
+					OUT.texcoord = IN.texcoord;
+					OUT.color = IN.color * _Color;
 
-			sampler2D _MainTex;
-			sampler2D _AlphaTex;
+					return OUT;
+				}
 
-			fixed4 SampleSpriteTexture(float2 uv)
-			{
-				fixed4 color = tex2D(_MainTex, uv);
+				sampler2D _MainTex;
+				sampler2D _AlphaTex;
+				float4 _MainTex_TexelSize;
 
-			#if ETC1_EXTERNAL_ALPHA
-				color.a = tex2D(_AlphaTex, uv).r;
-			#endif
+				fixed4 SampleSpriteTexture(float2 uv)
+				{
+					fixed4 color = tex2D(_MainTex, uv);
 
-				return color;
-			}
+				#if ETC1_EXTERNAL_ALPHA
+					color.a = tex2D(_AlphaTex, uv).r;
+				#endif
 
-			fixed4 frag(v2f IN) : SV_Target
-			{
-				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
-				c.rgb *= c.a;
+					return color;
+				}
 
-				return c;
-			}
+				fixed4 frag(v2f IN) : SV_Target
+				{
+					fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+
+					//float average = (c.r + c.g + c.b) / 3;
+
+					//c.r = average;
+					//c.g = mul(average, c.g);
+					//c.b = mul(average, c.b);
+
+					// If outline is enabled and there is a pixel, try to draw an outline.
+					if (_Outline > 0 && c.a != 0) {
+						// Get the neighbouring four pixels.
+						fixed4 pixelUp = tex2D(_MainTex, IN.texcoord + fixed2(0, _MainTex_TexelSize.y));
+						fixed4 pixelDown = tex2D(_MainTex, IN.texcoord - fixed2(0, _MainTex_TexelSize.y));
+						fixed4 pixelRight = tex2D(_MainTex, IN.texcoord + fixed2(_MainTex_TexelSize.x, 0));
+						fixed4 pixelLeft = tex2D(_MainTex, IN.texcoord - fixed2(_MainTex_TexelSize.x, 0));
+
+						// If one of the neighbouring pixels is invisible, we render an outline.
+						if (pixelUp.a * pixelDown.a * pixelRight.a * pixelLeft.a == 0) {
+							c.rgba = fixed4(1, 1, 1, 1) * _OutlineColor;
+						}
+					}
+
+					c.rgb *= c.a;
+
+					return c;
+				}
 
 			ENDCG
 		}

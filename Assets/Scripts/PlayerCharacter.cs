@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour
+[RequireComponent (typeof (Rigidbody2D))]
+public class PlayerCharacter : MonoBehaviour
 {
 
 	private Rigidbody2D _rb2d;
 	private SpriteRenderer _spriteRenderer;
+	private SpeechBubble _speechBubble;
 	private Animator _animator;
+	private float _movementSpeed = 2;
 
 	void Awake ()
 	{
 		_rb2d = GetComponent<Rigidbody2D>();
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		_animator = GetComponent<Animator>();
+		_speechBubble = GetComponent<SpeechBubble>();
 	}
 
 	void FixedUpdate ()
@@ -43,15 +45,22 @@ public class CharacterMovement : MonoBehaviour
 			{
 				if (TurnManager.RemainingTurns < 1)
 				{
-					Debug.Log("YO out of turns fool, go find food lol!");
+					_speechBubble.ShowBubble();
 					return;
 				}
 				StopAllCoroutines();
 				StartCoroutine(MoveTo(hit.transform.position, () =>
 				{
-					hit.collider.GetComponent<PopupItem>().Interract();
+					if (hit.collider.GetComponent<InteractableItem>() != null)
+					{
+						hit.collider.GetComponent<InteractableItem>().Interract();
+					}
 					TurnManager.SpendTurn();
 				}));
+			}
+			if (hit.collider != null && hit.collider.tag == "Scavenge")
+			{
+
 			}
 		}
 	}
@@ -61,26 +70,26 @@ public class CharacterMovement : MonoBehaviour
 		var remainingDistance = (Vector2) transform.position - destination;
 		var direction = remainingDistance.normalized;
 
-		if (direction.x > 0 && _spriteRenderer.flipX)
+		if (direction.x < 0 && _spriteRenderer.flipX)
 		{
 			_spriteRenderer.flipX = false;
 		}
-		if (direction.x < 0 && !_spriteRenderer.flipX)
+		if (direction.x > 0 && !_spriteRenderer.flipX)
 		{
 			_spriteRenderer.flipX = true;
 		}
-		//_animator.SetBool("Walking", true);
+		_animator.SetBool("Moving", true);
 
 		while (remainingDistance.sqrMagnitude > 0.1f)
 		{
-			Vector2 newPostion = Vector3.MoveTowards(_rb2d.position, destination, Time.deltaTime);
+			Vector2 newPostion = Vector3.MoveTowards(_rb2d.position, destination, _movementSpeed * Time.deltaTime);
 			_rb2d.MovePosition(newPostion);
 
 			remainingDistance = (Vector2) transform.position - destination;
 
 			yield return null;
 		}
-		//_animator.SetBool("Walking", false);
+		_animator.SetBool("Moving", false);
 		reacedDestination();
 	}
 

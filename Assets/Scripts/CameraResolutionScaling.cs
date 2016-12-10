@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security;
 using UnityEngine;
 
 public class CameraResolutionScaling : MonoBehaviour {
@@ -7,6 +8,7 @@ public class CameraResolutionScaling : MonoBehaviour {
 	private Camera _mainCamera;
 
 	public int Ppu = 32;
+    public int PpuScale = 1;
 
 	void Awake ()
 	{
@@ -14,10 +16,8 @@ public class CameraResolutionScaling : MonoBehaviour {
 
 		var verticalResolution = 240;
 		var horizontalResolution = (verticalResolution / 3) * 4;
-
-		var orthoSize = horizontalResolution / (((horizontalResolution / verticalResolution) * 2) * Ppu);
-
-		_mainCamera.orthographicSize = orthoSize;
+	    	   
+	    _mainCamera.orthographicSize = (float)verticalResolution/(2*Ppu);
 		Screen.SetResolution(horizontalResolution, verticalResolution, true);
 	}
 }

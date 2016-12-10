@@ -103,9 +103,8 @@
 					//c.g = mul(average, c.g);
 					//c.b = mul(average, c.b);
 
-					// If outline is enabled and there is a pixel, try to draw an outline.
-					if (_Outline > 0 && c.a != 0) {
-						// Get the neighbouring four pixels.
+					if (_Outline > 0 && c.a != 0)
+					{
 						fixed4 pixelUp = tex2D(_MainTex, IN.texcoord + fixed2(0, _MainTex_TexelSize.y));
 						fixed4 pixelDown = tex2D(_MainTex, IN.texcoord - fixed2(0, _MainTex_TexelSize.y));
 						fixed4 pixelRight = tex2D(_MainTex, IN.texcoord + fixed2(_MainTex_TexelSize.x, 0));

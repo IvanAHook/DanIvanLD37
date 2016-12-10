@@ -39,7 +39,7 @@ public class CharacterMovement : MonoBehaviour
 
 		if (Input.GetMouseButtonDown(0))
 		{
-			if (hit.collider != null)
+			if (hit.collider != null && hit.collider.gameObject.layer != 5)
 			{
 				StopAllCoroutines();
 				StartCoroutine(MoveTo(hit.transform.position, () =>

@@ -10,7 +10,7 @@ public class PlayerCharacter : MonoBehaviour
 	private SpriteRenderer _spriteRenderer;
 	private SpeechBubble _speechBubble;
 	private Animator _animator;
-	private float _movementSpeed = 2;
+	private float _movementSpeed = 3;
 
 	void Awake ()
 	{
@@ -45,7 +45,7 @@ public class PlayerCharacter : MonoBehaviour
 			{
 				if (TurnManager.RemainingTurns < 1)
 				{
-					_speechBubble.ShowBubble();
+					_speechBubble.ShowBubble(0);
 					return;
 				}
 				StopAllCoroutines();
@@ -67,7 +67,9 @@ public class PlayerCharacter : MonoBehaviour
 
 	private IEnumerator MoveTo(Vector2 destination, Action reacedDestination)
 	{
-		var remainingDistance = (Vector2) transform.position - destination;
+		var clampedDestination = new Vector2(destination.x, Mathf.Clamp(destination.y, -2.7f, -2.2f));
+
+		var remainingDistance = (Vector2) transform.position - clampedDestination;
 		var direction = remainingDistance.normalized;
 
 		if (direction.x < 0 && _spriteRenderer.flipX)
@@ -82,14 +84,16 @@ public class PlayerCharacter : MonoBehaviour
 
 		while (remainingDistance.sqrMagnitude > 0.1f)
 		{
-			Vector2 newPostion = Vector3.MoveTowards(_rb2d.position, destination, _movementSpeed * Time.deltaTime);
+			Vector2 newPostion = Vector3.MoveTowards(_rb2d.position, clampedDestination, _movementSpeed * Time.deltaTime);
 			_rb2d.MovePosition(newPostion);
 
-			remainingDistance = (Vector2) transform.position - destination;
+			remainingDistance = (Vector2) transform.position - clampedDestination;
 
-			yield return null;
+			yield return new WaitForEndOfFrame();
 		}
 		_animator.SetBool("Moving", false);
+
+		yield return new WaitForSeconds(0.2f);
 		reacedDestination();
 	}
 

@@ -38,4 +38,5 @@ public class Inventory : MonoBehaviour
             DestroyImmediate(_items[i].gameObject);
         }
     }
+
 }

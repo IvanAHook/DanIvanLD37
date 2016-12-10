@@ -22,4 +22,9 @@ public static class TurnManager
 		return true;
 	}
 
+	public static void IncreaseTurnCount(int count)
+	{
+		RemainingTurns += count;
+	}
+
 }

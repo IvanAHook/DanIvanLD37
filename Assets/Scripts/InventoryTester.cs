@@ -1,0 +1,35 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class InventoryTester : MonoBehaviour
+{
+
+    public Item item;
+    public Inventory inventory;
+
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+    private void OnMouseDown()
+    {
+        SetItemInBar();
+    }
+
+    public void SetItemInBar()
+    {
+        Item[] items = new Item[4];
+        for (int i = 0; i < 4; i++)
+        {
+            items[i] = Instantiate(item, new Vector2(-1000, -1000), Quaternion.identity);
+        }
+        inventory.SetItems(items);
+    }
+}

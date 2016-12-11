@@ -59,8 +59,6 @@ public class PlayerCharacter : MonoBehaviour
 			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
 
-			    _characterSound.PlayAction();
-
 				if (TurnManager.RemainingTurns < 1)
 				{
 					_speechBubble.ShowBubble(0);

@@ -20,7 +20,6 @@ public class ScavengeDoor : InteractableItem
 	{
 		_fadeSpriteRenderer = Fade.GetComponent<SpriteRenderer>();
 		_fadeTextSpriteRenderer = Fade.FindChild("FadeText").GetComponent<SpriteRenderer>();
-
 		StartCoroutine(SmoothFade());
 	}
 
@@ -33,7 +32,7 @@ public class ScavengeDoor : InteractableItem
 		var textColor = _fadeTextSpriteRenderer.color;
 
 		_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-		_fadeSpriteRenderer.enabled = true;
+	    Fade.gameObject.SetActive(true);
 
 		yield return new WaitForSeconds(0.2f);
 
@@ -67,7 +66,7 @@ public class ScavengeDoor : InteractableItem
 
 
 		_fadeTextSpriteRenderer.enabled = false;
-		_fadeSpriteRenderer.enabled = false;
+        Fade.gameObject.SetActive(false);
 	    audioSource.panStereo = p;
 	}
 

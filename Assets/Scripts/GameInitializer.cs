@@ -7,7 +7,5 @@ public class GameInitializer : MonoBehaviour
 	private void Awake()
 	{
 		TurnManager.Initialize();
-	    Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
-
 	}
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
 
+    public Texture2D moveCursor;
 	private Rigidbody2D _rb2d;
 	private SpriteRenderer _spriteRenderer;
 	private SpeechBubble _speechBubble;
@@ -32,19 +33,27 @@ public class PlayerCharacter : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction, Mathf.Infinity);
 
-		if (hit.collider != null)
-		{
-			var spriteOutline = hit.collider.GetComponent<SpriteOutline>();
-			if (spriteOutline != null)
-			{
-				spriteOutline.ShowOutline = true;
-			}
-		}
+	    if (hit.collider != null)
+	    {
+	        Cursor.SetCursor(moveCursor, Vector2.zero, CursorMode.Auto);
+
+	        var spriteOutline = hit.collider.GetComponent<SpriteOutline>();
+	        if (spriteOutline != null)
+	        {
+	            spriteOutline.ShowOutline = true;
+	        }
+	    }
+	    else
+	    {
+	        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
+	    }
 
 		if (Input.GetMouseButtonDown(0))
 		{
 			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
+
 			    _characterSound.PlayAction();
 
 				if (TurnManager.RemainingTurns < 1)

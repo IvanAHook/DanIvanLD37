@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 public class CharacterSound : MonoBehaviour
 {
     public AudioClip[] footsteps;
+    public AudioClip[] cloth;
     private AudioSource _audioSource;
 
 	// Use this for initialization
@@ -24,5 +25,12 @@ public class CharacterSound : MonoBehaviour
         int i = Random.Range(0, 9);
         _audioSource.pitch = Random.Range(0.8f, 1.2f);
         _audioSource.PlayOneShot(footsteps[i],1);
+    }
+
+    public void PlayCloth()
+    {
+        int i = Random.Range(0, 6);
+        _audioSource.pitch = 1;
+        _audioSource.PlayOneShot(cloth[i],1);
     }
 }

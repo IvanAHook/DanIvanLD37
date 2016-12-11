@@ -14,7 +14,7 @@ public class PlayerCharacter : MonoBehaviour
     private CharacterSound _characterSound;
 	private float _movementSpeed = 3;
 
-	void Awake ()
+	private void Awake ()
 	{
 		_rb2d = GetComponent<Rigidbody2D>();
 		_spriteRenderer = GetComponent<SpriteRenderer>();
@@ -23,7 +23,7 @@ public class PlayerCharacter : MonoBehaviour
 	    _characterSound = GetComponent<CharacterSound>();
 	}
 
-	void Update ()
+	private void Update ()
 	{
 		UpdateCursor();
 	}
@@ -69,6 +69,10 @@ public class PlayerCharacter : MonoBehaviour
 					{
 						hit.collider.GetComponent<InteractableItem>().Interract();
 					}
+					if (hit.collider.GetComponent<ScavengeDoor>() != null)
+					{
+						StartCoroutine(MoveToBed());
+					}
 					//TurnManager.SpendTurn();
 				}));
 			}
@@ -109,6 +113,12 @@ public class PlayerCharacter : MonoBehaviour
 
 		yield return new WaitForSeconds(0.2f);
 		reacedDestination();
+	}
+
+	private IEnumerator MoveToBed()
+	{
+		yield return new WaitForSeconds(2f);
+		transform.position = new Vector3(-8f, -2.4f, 0f);
 	}
 
 }

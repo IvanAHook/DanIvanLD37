@@ -5,7 +5,8 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
 
-    public GameObject[] itemSlot;
+    public GameObject[] ItemSlot;
+	public Item[] AvaliableItems;
     private Item[] _items;
 
 	// Use this for initialization
@@ -24,9 +25,14 @@ public class Inventory : MonoBehaviour
         for(int i = 0; i < _items.Length; i++)
         {
             _items[i].transform.SetParent(this.transform);
-            _items[i].transform.position = itemSlot[i].transform.position;
+            _items[i].transform.position = ItemSlot[i].transform.position;
         }
     }
+
+	public Item GetItem(int i)
+	{
+		return AvaliableItems[i];
+	}
 
     private void ClearItems()
     {

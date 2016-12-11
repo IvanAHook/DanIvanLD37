@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class TurnManager
 {
+	public const int MaxTurns = 8;
 	public static int RemainingTurns { get; private set; }
 
 	public static void Initialize()

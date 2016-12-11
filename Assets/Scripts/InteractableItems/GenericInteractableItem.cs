@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RadioManualInteractableItem : InteractableItem
+public class GenericInteractableItem : InteractableItem
 {
 
 	public Transform DisplayItem;

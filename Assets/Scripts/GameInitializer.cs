@@ -1,21 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GameInitializer : MonoBehaviour {
-
-	public void OnLevelWasLoaded()
-	{
-		//TurnManager.Initialize();
-	}
-
-	void Start ()
+public class GameInitializer : MonoBehaviour
+{
+	private void Awake()
 	{
 		TurnManager.Initialize();
-	}
-	
-	void Update ()
-	{
-
 	}
 }

@@ -43,11 +43,12 @@ public class PlayerCharacter : MonoBehaviour
 		{
 			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
-//				if (TurnManager.RemainingTurns < 1)
-//				{
-//					_speechBubble.ShowBubble(0);
-//					return;
-//				}
+				if (TurnManager.RemainingTurns < 1)
+				{
+					_speechBubble.ShowBubble(0);
+					return;
+				}
+
 				StopAllCoroutines();
 				StartCoroutine(MoveTo(hit.transform.position, () =>
 				{
@@ -67,7 +68,7 @@ public class PlayerCharacter : MonoBehaviour
 
 	private IEnumerator MoveTo(Vector2 destination, Action reacedDestination)
 	{
-		var clampedDestination = new Vector2(destination.x, Mathf.Clamp(destination.y, -2.7f, -2.2f));
+		var clampedDestination = new Vector2(destination.x, Mathf.Clamp(destination.y, -2.7f, -2.4f));
 
 		var remainingDistance = (Vector2) transform.position - clampedDestination;
 		var direction = remainingDistance.normalized;

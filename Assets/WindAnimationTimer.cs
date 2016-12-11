@@ -24,14 +24,14 @@ public class WindAnimationTimer : MonoBehaviour
 
 	    if (_counter <= 0)
 	    {
-	        _counter = Random.Range(4f, 10f);
+	        _counter = Random.Range(minRandomTime, maxRandomTime);
 	        PlayAnimation();
 	    }
 	}
 
     private void PlayAnimation()
     {
-        _animator.speed = Random.Range(0.7f, 1.5f);
+        _animator.speed = Random.Range(minRandomSpeed, maxRandomSpeed);
         _animator.Play("Wind", 0);
     }
 }

@@ -7,7 +7,10 @@ public class CharacterSound : MonoBehaviour
 {
     public AudioClip[] footsteps;
     public AudioClip[] cloth;
+    public AudioClip action;
     private AudioSource _audioSource;
+    public AudioSource nonDiegeticSource;
+
 
 	// Use this for initialization
 	void Start ()
@@ -32,5 +35,10 @@ public class CharacterSound : MonoBehaviour
         int i = Random.Range(0, 6);
         _audioSource.pitch = 1;
         _audioSource.PlayOneShot(cloth[i],1);
+    }
+
+    public void PlayAction()
+    {
+        nonDiegeticSource.PlayOneShot(action);
     }
 }

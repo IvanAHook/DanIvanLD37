@@ -10,6 +10,7 @@ public class PlayerCharacter : MonoBehaviour
 	private SpriteRenderer _spriteRenderer;
 	private SpeechBubble _speechBubble;
 	private Animator _animator;
+    private CharacterSound _characterSound;
 	private float _movementSpeed = 3;
 
 	void Awake ()
@@ -18,6 +19,7 @@ public class PlayerCharacter : MonoBehaviour
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		_animator = GetComponent<Animator>();
 		_speechBubble = GetComponent<SpeechBubble>();
+	    _characterSound = GetComponent<CharacterSound>();
 	}
 
 	void Update ()
@@ -43,6 +45,8 @@ public class PlayerCharacter : MonoBehaviour
 		{
 			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
+			    _characterSound.PlayAction();
+
 				if (TurnManager.RemainingTurns < 1)
 				{
 					_speechBubble.ShowBubble(0);

@@ -58,7 +58,7 @@ public class ScavengeDoor : InteractableItem
 	    while (a > 0)
 		{
 			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-			_fadeTextSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
 
 			a -= _fadeSpeed;
 			yield return new WaitForSeconds(0.01f);

@@ -48,7 +48,7 @@ public static class TurnManager
 		switch (CurrentDay)
 		{
 			case 1:
-				items = new int[4] {0,0,0,0};
+				items = new int[4] {2,2,2,2};
 				break;
 			case 2:
 				items = new int[4] {1,1,1,1};

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Curtain : MonoBehaviour
+public class WindAnimationTimer : MonoBehaviour
 {
 
     private Animator _animator;

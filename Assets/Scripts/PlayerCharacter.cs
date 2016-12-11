@@ -20,7 +20,7 @@ public class PlayerCharacter : MonoBehaviour
 		_speechBubble = GetComponent<SpeechBubble>();
 	}
 
-	void FixedUpdate ()
+	void Update ()
 	{
 		UpdateCursor();
 	}
@@ -43,11 +43,11 @@ public class PlayerCharacter : MonoBehaviour
 		{
 			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
-				if (TurnManager.RemainingTurns < 1)
-				{
-					_speechBubble.ShowBubble(0);
-					return;
-				}
+//				if (TurnManager.RemainingTurns < 1)
+//				{
+//					_speechBubble.ShowBubble(0);
+//					return;
+//				}
 				StopAllCoroutines();
 				StartCoroutine(MoveTo(hit.transform.position, () =>
 				{

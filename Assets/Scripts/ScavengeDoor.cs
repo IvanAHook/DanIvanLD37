@@ -6,43 +6,54 @@ public class ScavengeDoor : InteractableItem
 
 	public Transform Fade;
 	public Inventory Inventory;
+
 	private float _fadeSpeed = 0.01f;
+	private SpriteRenderer _fadeSpriteRenderer;
+	private SpriteRenderer _fadeTextSpriteRenderer;
 
 	public override void Interract()
 	{
-		var fadeSpriteRenderer = Fade.GetComponent<SpriteRenderer>();
-		StartCoroutine(SmoothFade(fadeSpriteRenderer));
+		_fadeSpriteRenderer = Fade.GetComponent<SpriteRenderer>();
+		_fadeTextSpriteRenderer = Fade.FindChild("FadeText").GetComponent<SpriteRenderer>();
+
+		StartCoroutine(SmoothFade());
 	}
 
-	private IEnumerator SmoothFade(SpriteRenderer fadeSpriteRenderer)
+	private IEnumerator SmoothFade( )
 	{
 		var a = 0f;
-		var color = fadeSpriteRenderer.color;
+		var color = _fadeSpriteRenderer.color;
+		var textColor = _fadeTextSpriteRenderer.color;
 
-		fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-		fadeSpriteRenderer.enabled = true;
+		_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+		_fadeSpriteRenderer.enabled = true;
 
 		yield return new WaitForSeconds(0.2f);
 
 		while (a < 1)
 		{
 
-			fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
 			a += _fadeSpeed;
 			yield return new WaitForSeconds(0.01f);
 		}
 
-		yield return new WaitForSeconds(2f);
+		_fadeTextSpriteRenderer.enabled = true;
+
+		yield return new WaitForSeconds(4f);
+
 		AquireItems();
 
 		while (a > 0)
 		{
+			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+			_fadeTextSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
 
-			fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
 			a -= _fadeSpeed;
 			yield return new WaitForSeconds(0.01f);
 		}
-		fadeSpriteRenderer.enabled = false;
+		_fadeTextSpriteRenderer.enabled = false;
+		_fadeSpriteRenderer.enabled = false;
 	}
 
 	public void AquireItems()

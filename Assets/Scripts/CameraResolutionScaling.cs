@@ -15,9 +15,11 @@ public class CameraResolutionScaling : MonoBehaviour {
 		_mainCamera = Camera.main;
 
 		var verticalResolution = 360;
+		var orthoSize = 5.625;
 		var horizontalResolution = (verticalResolution / 9) * 16;
 	    	   
 	    _mainCamera.orthographicSize = (float)verticalResolution/(2*Ppu);
 		Screen.SetResolution(horizontalResolution, verticalResolution, true);
+		//Screen.fullScreen = false;
 	}
 }

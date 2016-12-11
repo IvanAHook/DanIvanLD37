@@ -39,9 +39,11 @@ public class ScavengeDoor : InteractableItem
 		}
 
 		_fadeTextSpriteRenderer.enabled = true;
+		_fadeTextSpriteRenderer.color = new Color(color.r, color.g, color.b, 1f);
 
 		yield return new WaitForSeconds(4f);
 
+		TurnManager.NextDay();
 		AquireItems();
 
 		while (a > 0)
@@ -59,9 +61,10 @@ public class ScavengeDoor : InteractableItem
 	public void AquireItems()
 	{
 		Item[] items = new Item[4];
+		var itemIds = TurnManager.GetItemsForDay();
 		for (int i = 0; i < 4; i++)
 		{
-			items[i] = Instantiate(Inventory.GetItem(1), new Vector2(-1000, -1000), Quaternion.identity);
+			items[i] = Instantiate(Inventory.GetItem(itemIds[i]), new Vector2(-1000, -1000), Quaternion.identity);
 		}
 		Inventory.SetItems(items);
 	}

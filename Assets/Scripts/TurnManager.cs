@@ -12,6 +12,7 @@ public static class TurnManager
 
 	public static void Initialize()
 	{
+		CurrentDay = 0;
 		RemainingTurns = 4;
 	}
 
@@ -39,6 +40,28 @@ public static class TurnManager
 		{
 			RemainingTurns = 4;
 		}
+	}
+
+	public static int[] GetItemsForDay()
+	{
+		int[] items = new int[4];
+		switch (CurrentDay)
+		{
+			case 1:
+				items = new int[4] {0,0,0,0};
+				break;
+			case 2:
+				items = new int[4] {1,1,1,1};
+				break;
+			case 3:
+				items = new int[4] {0,0,0,0};
+				break;
+			case 4:
+				items = new int[4] {0,0,0,0};
+				break;
+		}
+
+		return items;
 	}
 
 }

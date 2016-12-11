@@ -26,6 +26,11 @@ public class PlayerCharacter : MonoBehaviour
 	private void Update ()
 	{
 		UpdateCursor();
+
+//		if (Input.GetKey(KeyCode.A))
+//		{
+//			Application.LoadLevel(Application.loadedLevel);
+//		}
 	}
 
 	private void UpdateCursor()

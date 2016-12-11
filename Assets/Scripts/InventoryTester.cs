@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InventoryTester : MonoBehaviour
 {
 
-    public Item item;
-    public Inventory inventory;
+    public Item Item;
+    public Inventory Inventory;
 
 	// Use this for initialization
 	void Start () {
@@ -28,8 +26,8 @@ public class InventoryTester : MonoBehaviour
         Item[] items = new Item[4];
         for (int i = 0; i < 4; i++)
         {
-            items[i] = Instantiate(item, new Vector2(-1000, -1000), Quaternion.identity);
+            items[i] = Instantiate(Item, new Vector2(-1000, -1000), Quaternion.identity);
         }
-        inventory.SetItems(items);
+	    Inventory.SetItems(items);
     }
 }

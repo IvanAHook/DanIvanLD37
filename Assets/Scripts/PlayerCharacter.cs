@@ -60,7 +60,7 @@ public class PlayerCharacter : MonoBehaviour
 					{
 						hit.collider.GetComponent<InteractableItem>().Interract();
 					}
-					TurnManager.SpendTurn();
+					//TurnManager.SpendTurn();
 				}));
 			}
 			if (hit.collider != null && hit.collider.tag == "Scavenge")

@@ -51,10 +51,11 @@ public class ScavengeDoor : InteractableItem
 	    var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
 	    audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
-	    roomSnapshot.TransitionTo(6f);
 	    yield return new WaitForSeconds(6f);
+	    roomSnapshot.TransitionTo(2f);
 
-		AquireItems();
+
+	    AquireItems();
 	    while (a > 0)
 		{
 			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);

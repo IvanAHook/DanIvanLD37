@@ -5,6 +5,8 @@ using UnityEngine;
 public class WindAnimationTimer : MonoBehaviour
 {
 
+    public float minRandomTime = 4f, maxRandomTime = 10f;
+    public float minRandomSpeed = 0.7f, maxRandomSpeed = 1.5f;
     private Animator _animator;
     private float _counter;
 

@@ -31,6 +31,7 @@ public class PlayerCharacter : MonoBehaviour
 	    _blockInput = false;
 	}
 
+
 	private void Update ()
 	{
 	    if(!_blockInput)

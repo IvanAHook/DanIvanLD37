@@ -8,6 +8,7 @@ public class OneStaminaConsumable : Item
 	private SpriteRenderer _spriteRenderer;
 
 	public Sprite[] Sprites;
+    public AudioClip eatSound;
 
 	public override int SpriteId { get; set; }
 
@@ -26,7 +27,8 @@ public class OneStaminaConsumable : Item
 
     public override void UseItem()
     {
-	    TurnManager.IncreaseStamina(1);
+        Messenger<AudioClip>.Broadcast("PlaySound", eatSound);
+        TurnManager.IncreaseStamina(1);
 	    Messenger<Item>.Broadcast("removeItem", this);
     }
 

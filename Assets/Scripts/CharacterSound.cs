@@ -23,6 +23,12 @@ public class CharacterSound : MonoBehaviour
 		
 	}
 
+
+    private void OnEnable()
+    {
+        Messenger<AudioClip>.AddListener("PlaySound", PlaySound);
+    }
+
     public void PlayFootStep()
     {
         int i = Random.Range(0, 9);
@@ -40,5 +46,10 @@ public class CharacterSound : MonoBehaviour
     public void PlayAction()
     {
         nonDiegeticSource.PlayOneShot(action);
+    }
+
+    public void PlaySound(AudioClip sound)
+    {
+        _audioSource.PlayOneShot(sound, 2f);
     }
 }

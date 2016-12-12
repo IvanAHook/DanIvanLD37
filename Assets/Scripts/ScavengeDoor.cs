@@ -57,6 +57,8 @@ public class ScavengeDoor : InteractableItem
 		_fadeTextSpriteRenderer.enabled = true;
 		_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, 1);
 
+	    Messenger.Broadcast("KillRadio");
+
 		var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
 

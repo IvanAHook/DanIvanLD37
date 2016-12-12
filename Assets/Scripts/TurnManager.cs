@@ -24,7 +24,7 @@ public static class TurnManager
 	public static void NextDay()
 	{
 		CurrentDay += 1;
-
+		Messenger.Broadcast("newDay");
 		InitializeDay();
 	}
 
@@ -54,7 +54,7 @@ public static class TurnManager
 				items = new int[1] {1};
 				break;
 			case 2:
-				items = new int[1] {1};
+				items = new int[3] {1,1,1};
 				break;
 			case 3:
 				items = new int[1] {1};

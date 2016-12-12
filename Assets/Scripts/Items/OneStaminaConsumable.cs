@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OneStaminaConsumable : Item {
+public class OneStaminaConsumable : Item
+{
+
+	public Sprite[] Sprites;
 
 	void Start ()
 	{
 		var spriteRenderer = GetComponent<SpriteRenderer>();
+		spriteRenderer.sprite = Sprites[Random.Range(0, Sprites.Length)];
 	}
 
     private void OnMouseDown()
@@ -16,7 +20,6 @@ public class OneStaminaConsumable : Item {
 
     public override void UseItem()
     {
-        Debug.Log("CARROT!");
 	    TurnManager.IncreaseStamina(1);
 	    Messenger<Item>.Broadcast("removeItem", this);
     }

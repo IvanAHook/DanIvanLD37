@@ -13,7 +13,7 @@ public static class TurnManager
 	public static void Initialize()
 	{
 		CurrentDay = 0;
-		Stamina = 0;
+		InitializeDay();
 	}
 
 	public static void IncreaseStamina(int amount)
@@ -25,7 +25,20 @@ public static class TurnManager
 	{
 		CurrentDay += 1;
 
-		Stamina = 0;
+		InitializeDay();
+	}
+
+	private static void InitializeDay()
+	{
+		if (CurrentDay == 0)
+		{
+			Stamina = 7;
+		}
+		else
+		{
+			Stamina -= 4;
+		}
+		Messenger.Broadcast("aquireItems");
 	}
 
 	public static int[] GetItemsForDay()
@@ -34,17 +47,20 @@ public static class TurnManager
 
 		switch (CurrentDay)
 		{
+			case 0:
+				items = new int[1] {1};
+				break;
 			case 1:
-				items = new int[4] {0,2,1,2};
+				items = new int[1] {1};
 				break;
 			case 2:
-				items = new int[4] {1,2,1,1};
+				items = new int[1] {1};
 				break;
 			case 3:
-				items = new int[4] {0,2,0,1};
+				items = new int[1] {1};
 				break;
 			case 4:
-				items = new int[4] {0,2,0,1};
+				items = new int[1] {1};
 				break;
 		}
 

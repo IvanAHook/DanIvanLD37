@@ -18,7 +18,7 @@ public class PlayerCharacter : MonoBehaviour
 	private SpeechBubble _speechBubble;
 	private Animator _animator;
     private CharacterSound _characterSound;
-	private float _movementSpeed = 3;
+	private float _movementSpeed = 2.5f;
     private Boolean _blockInput;
 
 	private void Awake ()

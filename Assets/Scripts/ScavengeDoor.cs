@@ -67,7 +67,6 @@ public class ScavengeDoor : InteractableItem
 	    roomSnapshot.TransitionTo(2f);
 
 		TurnManager.NextDay();
-		AquireItems();
 
 	    while (a > 0)
 		{
@@ -95,15 +94,4 @@ public class ScavengeDoor : InteractableItem
 		_fadeTextSpriteRenderer.sprite = FadeTextArray[0];
 	}
 
-	private void AquireItems()
-	{
-		var itemsList = new Item[4];
-		var newItems = TurnManager.GetItemsForDay();
-
-		for (int i = 0; i < 4; i++)
-		{
-			itemsList[i] = Instantiate(Inventory.GetItem(newItems[i]), new Vector2(-1000, -1000), Quaternion.identity);
-		}
-		Inventory.SetItems(itemsList);
-	}
 }

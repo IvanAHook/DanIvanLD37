@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Carrot : Item {
+public class OneStaminaConsumable : Item {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void Start ()
+	{
+		var spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
     private void OnMouseDown()
@@ -23,6 +18,6 @@ public class Carrot : Item {
     {
         Debug.Log("CARROT!");
 	    TurnManager.IncreaseStamina(1);
-	    Destroy(gameObject);
+	    Messenger<Item>.Broadcast("removeItem", this);
     }
 }

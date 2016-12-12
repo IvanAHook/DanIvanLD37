@@ -28,6 +28,13 @@ public static class TurnManager
 		InitializeDay();
 	}
 
+	public static void ResetToLastDay()
+	{
+		CurrentDay -= 1;
+		Stamina += 4;
+		Messenger.Broadcast("resetItemsToLastDay");
+	}
+
 	private static void InitializeDay()
 	{
 		if (CurrentDay == 0)
@@ -38,7 +45,11 @@ public static class TurnManager
 		{
 			Stamina -= 4;
 		}
-		Messenger.Broadcast("aquireItems");
+
+		if (Stamina >= 0)
+		{
+			Messenger.Broadcast("aquireItems");
+		}
 	}
 
 	public static int[] GetItemsForDay()

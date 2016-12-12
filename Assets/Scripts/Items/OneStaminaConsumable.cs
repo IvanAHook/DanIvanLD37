@@ -5,12 +5,18 @@ using UnityEngine;
 public class OneStaminaConsumable : Item
 {
 
+	private SpriteRenderer _spriteRenderer;
+
 	public Sprite[] Sprites;
 
-	void Start ()
+	public override int SpriteId { get; set; }
+
+	void Awake()
 	{
-		var spriteRenderer = GetComponent<SpriteRenderer>();
-		spriteRenderer.sprite = Sprites[Random.Range(0, Sprites.Length)];
+		_spriteRenderer = GetComponent<SpriteRenderer>();
+
+		SpriteId = Random.Range(0, Sprites.Length);
+		_spriteRenderer.sprite = Sprites[SpriteId];
 	}
 
     private void OnMouseDown()
@@ -23,4 +29,9 @@ public class OneStaminaConsumable : Item
 	    TurnManager.IncreaseStamina(1);
 	    Messenger<Item>.Broadcast("removeItem", this);
     }
+
+	public override void SetSprite(int id)
+	{
+		_spriteRenderer.sprite = Sprites[id];
+	}
 }

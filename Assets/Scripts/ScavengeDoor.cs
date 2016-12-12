@@ -11,12 +11,15 @@ public class ScavengeDoor : InteractableItem
 
 	public Sprite[] FadeTextArray;
 
-    public AudioMixerSnapshot roomSnapshot;
+	public Sprite[] DayNumberTextArray;
+
+	public AudioMixerSnapshot roomSnapshot;
     public AudioMixerSnapshot transitionSnapshot;
     public AudioClip[] transitions;
     public AudioClip deathMusic;
 
 	private float _fadeSpeed = 0.01f;
+	private float _dayFadeSpeed = 0.005f;
 	private SpriteRenderer _fadeSpriteRenderer;
 	private SpriteRenderer _fadeTextSpriteRenderer;
 
@@ -57,7 +60,7 @@ public class ScavengeDoor : InteractableItem
 		var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
 		TurnManager.NextDay();
-		if (TurnManager.Stamina < 4)
+		if (TurnManager.Stamina < 0)
 	    {
 	        audioSource.PlayOneShot(deathMusic, 3f);
 	    }
@@ -68,26 +71,35 @@ public class ScavengeDoor : InteractableItem
 	    yield return new WaitForSeconds(6f);
 	    roomSnapshot.TransitionTo(2f);
 
-		if (TurnManager.Stamina < 1)
+		if (TurnManager.Stamina < 0)
 		{
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+			TurnManager.ResetToLastDay();
 		}
-		else
+
+		while (a > 0)
 		{
-			while (a > 0)
-			{
-				_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-				_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
+			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
 
-				a -= _fadeSpeed;
-				yield return new WaitForSeconds(0.01f);
-			}
-
-
-			_fadeTextSpriteRenderer.enabled = false;
-			Fade.gameObject.SetActive(false);
-			audioSource.panStereo = p;
+			a -= _fadeSpeed;
+			yield return new WaitForSeconds(0.01f);
 		}
+
+		a = 1;
+		_fadeTextSpriteRenderer.sprite = DayNumberTextArray[TurnManager.CurrentDay - 1];
+		while (a > 0)
+		{
+			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
+
+			a -= _dayFadeSpeed;
+			yield return new WaitForSeconds(0.01f);
+		}
+
+
+		_fadeTextSpriteRenderer.enabled = false;
+		Fade.gameObject.SetActive(false);
+		audioSource.panStereo = p;
+
 	}
 
 	private void SetFadeMessage()

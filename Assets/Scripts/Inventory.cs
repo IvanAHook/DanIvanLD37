@@ -8,7 +8,9 @@ public class Inventory : MonoBehaviour
 
     public GameObject[] ItemSlot;
 	public Item[] AvaliableItems;
-    private List<Item> _items;
+
+	private List<Item> _items;
+	private Item[] _itemsAtStartOfDay;
 
 	private void Awake()
 	{
@@ -29,7 +31,8 @@ public class Inventory : MonoBehaviour
             _items[i].transform.SetParent(transform);
             _items[i].transform.position = ItemSlot[i].transform.position;
         }
-    }
+		_itemsAtStartOfDay = _items.ToArray();
+	}
 
 	public Item GetItem(int i)
 	{

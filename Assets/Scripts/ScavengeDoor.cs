@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class ScavengeDoor : InteractableItem
 {
@@ -55,7 +56,8 @@ public class ScavengeDoor : InteractableItem
 
 		var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
-	    if (TurnManager.Stamina < 1)
+		TurnManager.NextDay();
+		if (TurnManager.Stamina < 4)
 	    {
 	        audioSource.PlayOneShot(deathMusic, 3f);
 	    }
@@ -66,26 +68,31 @@ public class ScavengeDoor : InteractableItem
 	    yield return new WaitForSeconds(6f);
 	    roomSnapshot.TransitionTo(2f);
 
-		TurnManager.NextDay();
-
-	    while (a > 0)
+		if (TurnManager.Stamina < 1)
 		{
-			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
-
-			a -= _fadeSpeed;
-			yield return new WaitForSeconds(0.01f);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
+		else
+		{
+			while (a > 0)
+			{
+				_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+				_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
+
+				a -= _fadeSpeed;
+				yield return new WaitForSeconds(0.01f);
+			}
 
 
-		_fadeTextSpriteRenderer.enabled = false;
-        Fade.gameObject.SetActive(false);
-	    audioSource.panStereo = p;
+			_fadeTextSpriteRenderer.enabled = false;
+			Fade.gameObject.SetActive(false);
+			audioSource.panStereo = p;
+		}
 	}
 
 	private void SetFadeMessage()
 	{
-		if (TurnManager.Stamina < 1)
+		if (TurnManager.Stamina < 4)
 		{
 			_fadeTextSpriteRenderer.sprite = FadeTextArray[1];
 			return;

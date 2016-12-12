@@ -19,6 +19,11 @@ public class RadioInteractableItem : InteractableItem
         _audioSource.clip = staticNoVoices;
     }
 
+    void Awake()
+    {
+        Messenger.AddListener("KillRadio", KillRadio);
+    }
+
 	public override void Interract()
 	{
         if (TurnManager.CurrentDay >= (changeoToVoicesOnDay-1))
@@ -48,4 +53,13 @@ public class RadioInteractableItem : InteractableItem
 	        _isActuallyPlaying = true;
 	    }
 	}
+
+    private void KillRadio()
+    {
+        if (_isActuallyPlaying)
+        {
+            _audioSource.Stop();
+            _isActuallyPlaying = false;
+        }
+    }
 }

@@ -9,16 +9,16 @@ public class TurnBar : MonoBehaviour
 	private void Start ()
 	{
 		_spriteRenderer = GetComponent<SpriteRenderer>();
-		_turns = TurnManager.RemainingTurns;
+		_turns = TurnManager.Stamina;
 
 		UpdateTurns();
 	}
 
 	private void Update()
 	{
-		if (_turns != TurnManager.RemainingTurns)
+		if (_turns != TurnManager.Stamina)
 		{
-			_turns = TurnManager.RemainingTurns;
+			_turns = TurnManager.Stamina;
 
 			UpdateTurns();
 		}

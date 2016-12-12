@@ -22,5 +22,7 @@ public class Carrot : Item {
     public override void UseItem()
     {
         Debug.Log("CARROT!");
+	    TurnManager.IncreaseStamina(1);
+	    Destroy(gameObject);
     }
 }

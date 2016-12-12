@@ -6,8 +6,11 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
 
-    public Texture2D moveCursor;
-	private Rigidbody2D _rb2d;
+    public Texture2D MoveCursor;
+	public Texture2D InspectCursor;
+	public Texture2D InteractCursor;
+
+	private Rigidbody2D _rb2D;
 	private SpriteRenderer _spriteRenderer;
 	private SpeechBubble _speechBubble;
 	private Animator _animator;
@@ -16,7 +19,7 @@ public class PlayerCharacter : MonoBehaviour
 
 	private void Awake ()
 	{
-		_rb2d = GetComponent<Rigidbody2D>();
+		_rb2D = GetComponent<Rigidbody2D>();
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		_animator = GetComponent<Animator>();
 		_speechBubble = GetComponent<SpeechBubble>();
@@ -40,7 +43,24 @@ public class PlayerCharacter : MonoBehaviour
 
 	    if (hit.collider != null)
 	    {
-	        Cursor.SetCursor(moveCursor, Vector2.zero, CursorMode.Auto);
+		    if (hit.collider.tag == "Interactable")
+		    {
+			    var distance = Mathf.Abs(transform.position.x - hit.transform.position.x);
+
+			    Cursor.SetCursor(
+				    distance > 0.5 ? MoveCursor : InspectCursor,
+				    Vector2.zero, CursorMode.Auto);
+		    }
+
+		    else if (hit.collider.tag == "UIInteractable")
+		    {
+			    Cursor.SetCursor(InteractCursor, Vector2.zero, CursorMode.Auto);
+		    }
+
+		    else
+		    {
+			    Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+		    }
 
 	        var spriteOutline = hit.collider.GetComponent<SpriteOutline>();
 	        if (spriteOutline != null)
@@ -48,10 +68,9 @@ public class PlayerCharacter : MonoBehaviour
 	            spriteOutline.ShowOutline = true;
 	        }
 	    }
-	    else
+		else
 	    {
-	        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-
+		    Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 	    }
 
 		if (Input.GetMouseButtonDown(0))
@@ -59,11 +78,11 @@ public class PlayerCharacter : MonoBehaviour
 			if (hit.collider != null && hit.collider.tag == "Interactable")
 			{
 
-				if (TurnManager.RemainingTurns < 1)
-				{
-					_speechBubble.ShowBubble(0);
-					return;
-				}
+//				if (TurnManager.Stamina < 1)
+//				{
+//					_speechBubble.ShowBubble(0);
+//					return;
+//				}
 
 				StopAllCoroutines();
 				StartCoroutine(MoveTo(hit.transform.position, () =>
@@ -97,21 +116,24 @@ public class PlayerCharacter : MonoBehaviour
 		{
 			_spriteRenderer.flipX = false;
 		}
+
 		if (direction.x > 0 && !_spriteRenderer.flipX)
 		{
 			_spriteRenderer.flipX = true;
 		}
+
 		_animator.SetBool("Moving", true);
 
 		while (remainingDistance.sqrMagnitude > 0.1f)
 		{
-			Vector2 newPostion = Vector3.MoveTowards(_rb2d.position, clampedDestination, _movementSpeed * Time.deltaTime);
-			_rb2d.MovePosition(newPostion);
+			Vector2 newPostion = Vector3.MoveTowards(_rb2D.position, clampedDestination, _movementSpeed * Time.deltaTime);
+			_rb2D.MovePosition(newPostion);
 
 			remainingDistance = (Vector2) transform.position - clampedDestination;
 
 			yield return new WaitForEndOfFrame();
 		}
+
 		_animator.SetBool("Moving", false);
 
 		yield return new WaitForSeconds(0.2f);

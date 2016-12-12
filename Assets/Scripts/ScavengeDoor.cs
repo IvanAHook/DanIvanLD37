@@ -8,6 +8,8 @@ public class ScavengeDoor : InteractableItem
 	public Transform Fade;
 	public Inventory Inventory;
 
+	public Sprite[] FadeTextArray;
+
     public AudioMixerSnapshot roomSnapshot;
     public AudioMixerSnapshot transitionSnapshot;
     public AudioClip[] transitions;
@@ -47,13 +49,17 @@ public class ScavengeDoor : InteractableItem
 			yield return new WaitForSeconds(0.01f);
 		}
 
+		SetFadeMessage();
 		_fadeTextSpriteRenderer.enabled = true;
-	    var p = audioSource.panStereo;
+		_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, 1);
+
+		var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
 	    audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
 	    roomSnapshot.TransitionTo(6f);
 	    yield return new WaitForSeconds(6f);
 
+		TurnManager.NextDay();
 		AquireItems();
 	    while (a > 0)
 		{
@@ -70,13 +76,26 @@ public class ScavengeDoor : InteractableItem
 	    audioSource.panStereo = p;
 	}
 
-	public void AquireItems()
+	private void SetFadeMessage()
 	{
-		Item[] items = new Item[4];
+		if (TurnManager.Stamina < 1)
+		{
+			_fadeTextSpriteRenderer.sprite = FadeTextArray[1];
+			return;
+		}
+
+		_fadeTextSpriteRenderer.sprite = FadeTextArray[0];
+	}
+
+	private void AquireItems()
+	{
+		var itemsList = new Item[4];
+		var newItems = TurnManager.GetItemsForDay();
+
 		for (int i = 0; i < 4; i++)
 		{
-			items[i] = Instantiate(Inventory.GetItem(1), new Vector2(-1000, -1000), Quaternion.identity);
+			itemsList[i] = Instantiate(Inventory.GetItem(newItems[i]), new Vector2(-1000, -1000), Quaternion.identity);
 		}
-		Inventory.SetItems(items);
+		Inventory.SetItems(itemsList);
 	}
 }

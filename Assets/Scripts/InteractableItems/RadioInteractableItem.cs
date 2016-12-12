@@ -7,6 +7,7 @@ public class RadioInteractableItem : InteractableItem
     public AudioClip staticVoices;
     public AudioClip switchOn;
     public AudioClip switchOff;
+    public int changeoToVoicesOnDay;
 
     private AudioSource _audioSource;
     private AudioClip _currentClip;
@@ -20,7 +21,7 @@ public class RadioInteractableItem : InteractableItem
 
 	public override void Interract()
 	{
-        if (TurnManager.CurrentDay >= 4)
+        if (TurnManager.CurrentDay >= (changeoToVoicesOnDay-1))
 	    {
 	        _currentClip = staticVoices;
 	    }

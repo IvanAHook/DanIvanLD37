@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Curtain : MonoBehaviour
+public class WindAnimationTimer : MonoBehaviour
 {
 
+    public float minRandomTime = 4f, maxRandomTime = 10f;
+    public float minRandomSpeed = 0.7f, maxRandomSpeed = 1.5f;
     private Animator _animator;
     private float _counter;
 
@@ -22,14 +24,14 @@ public class Curtain : MonoBehaviour
 
 	    if (_counter <= 0)
 	    {
-	        _counter = Random.Range(4f, 10f);
+	        _counter = Random.Range(minRandomTime, maxRandomTime);
 	        PlayAnimation();
 	    }
 	}
 
     private void PlayAnimation()
     {
-        _animator.speed = Random.Range(0.7f, 1.5f);
+        _animator.speed = Random.Range(minRandomSpeed, maxRandomSpeed);
         _animator.Play("Wind", 0);
     }
 }

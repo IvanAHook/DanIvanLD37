@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
 
+    public GameObject shadow;
     public Texture2D moveCursor;
 	private Rigidbody2D _rb2d;
 	private SpriteRenderer _spriteRenderer;
@@ -13,6 +14,7 @@ public class PlayerCharacter : MonoBehaviour
 	private Animator _animator;
     private CharacterSound _characterSound;
 	private float _movementSpeed = 3;
+    private Boolean _blockInput;
 
 	private void Awake ()
 	{
@@ -21,11 +23,13 @@ public class PlayerCharacter : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		_speechBubble = GetComponent<SpeechBubble>();
 	    _characterSound = GetComponent<CharacterSound>();
+	    _blockInput = false;
 	}
 
 	private void Update ()
 	{
-		UpdateCursor();
+	    if(!_blockInput)
+		    UpdateCursor();
 
 //		if (Input.GetKey(KeyCode.A))
 //		{
@@ -120,8 +124,14 @@ public class PlayerCharacter : MonoBehaviour
 
 	private IEnumerator MoveToBed()
 	{
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(8f);
+	    _blockInput = true;
 		transform.position = new Vector3(-8f, -2.4f, 0f);
+	    GetComponent<Animator>().Play("RipleyAwake",0);;
 	}
 
+    public void BlockInput(){_blockInput = true;}
+    public void UnblockInput(){_blockInput = false;}
+    public void ShowShadow(){shadow.SetActive(true);}
+    public void HideShadow(){shadow.SetActive(false);}
 }

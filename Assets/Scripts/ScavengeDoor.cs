@@ -13,6 +13,7 @@ public class ScavengeDoor : InteractableItem
     public AudioMixerSnapshot roomSnapshot;
     public AudioMixerSnapshot transitionSnapshot;
     public AudioClip[] transitions;
+    public AudioClip deathMusic;
 
 	private float _fadeSpeed = 0.01f;
 	private SpriteRenderer _fadeSpriteRenderer;
@@ -54,7 +55,14 @@ public class ScavengeDoor : InteractableItem
 
 		var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
-	    audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
+	    if (TurnManager.Stamina < 1)
+	    {
+	        audioSource.PlayOneShot(deathMusic, 3f);
+	    }
+	    else
+	    {
+	        audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
+	    }
 	    yield return new WaitForSeconds(6f);
 	    roomSnapshot.TransitionTo(2f);
 

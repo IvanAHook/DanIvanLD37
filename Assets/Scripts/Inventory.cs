@@ -10,8 +10,6 @@ public class Inventory : MonoBehaviour
 	private List<Item> _items;
 
 	private List<int> _itemsAtStartOfDay;
-	private int _itemCountAtStartOfDay;
-
 
 	private void Awake()
 	{
@@ -40,7 +38,6 @@ public class Inventory : MonoBehaviour
         }
 
 		_itemsAtStartOfDay.Clear();
-		_itemCountAtStartOfDay = _items.Count;
 		for (int i = 0; i < _items.Count; i++)
 		{
 			_itemsAtStartOfDay.Add(_items[i].SpriteId);
@@ -53,7 +50,7 @@ public class Inventory : MonoBehaviour
 
 		var itemsList = new Item[_itemsAtStartOfDay.Count];
 
-		for (int i = 0; i < _itemCountAtStartOfDay; i++)
+		for (int i = 0; i < _itemsAtStartOfDay.Count; i++)
 		{
 			itemsList[i] = Instantiate(GetItem(0), new Vector2(-1000, -1000), Quaternion.identity);
 			itemsList[i].SetSprite(_itemsAtStartOfDay[i]);

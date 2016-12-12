@@ -7,6 +7,7 @@ public static class TurnManager
 {
 	public const int MaxTurns = 8;
 	public static int Stamina { get; private set; }
+	private static int _staminaAtStartOfDay;
 
 	public static int CurrentDay { get; private set; }
 
@@ -30,8 +31,7 @@ public static class TurnManager
 
 	public static void ResetToLastDay()
 	{
-		CurrentDay -= 1;
-		Stamina += 4;
+		Stamina = _staminaAtStartOfDay;
 		Messenger.Broadcast("resetItemsToLastDay");
 	}
 
@@ -46,6 +46,7 @@ public static class TurnManager
 			Stamina -= 4;
 		}
 
+		_staminaAtStartOfDay = Stamina;
 		if (Stamina >= 0)
 		{
 			Messenger.Broadcast("aquireItems");

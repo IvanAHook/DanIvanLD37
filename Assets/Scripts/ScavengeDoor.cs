@@ -59,22 +59,20 @@ public class ScavengeDoor : InteractableItem
 
 		var p = audioSource.panStereo;
 	    audioSource.panStereo = 0;
-		TurnManager.NextDay();
-		if (TurnManager.Stamina < 0)
+
+		if (TurnManager.Stamina - 4 < 0)
 	    {
 	        audioSource.PlayOneShot(deathMusic, 3f);
+		    TurnManager.ResetToLastDay();
 	    }
 	    else
 	    {
 	        audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
+		    TurnManager.NextDay();
+
 	    }
 	    yield return new WaitForSeconds(6f);
 	    roomSnapshot.TransitionTo(2f);
-
-		if (TurnManager.Stamina < 0)
-		{
-			TurnManager.ResetToLastDay();
-		}
 
 		while (a > 0)
 		{

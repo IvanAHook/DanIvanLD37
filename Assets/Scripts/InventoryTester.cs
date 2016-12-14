@@ -28,6 +28,6 @@ public class InventoryTester : MonoBehaviour
         {
             items[i] = Instantiate(Item, new Vector2(-1000, -1000), Quaternion.identity);
         }
-	    Inventory.SetItems(items);
+	    //Inventory.SetItems(items);
     }
 }

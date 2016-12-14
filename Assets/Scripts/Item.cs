@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-	public abstract int SpriteId { get; set; }
+	public abstract Sprite ItemSprite { get; set; }
+	public abstract ItemType Type { get; protected set; }
 
 	public abstract void UseItem();
 
@@ -14,6 +12,7 @@ public abstract class Item : MonoBehaviour
         UseItem();
     }
 
-	public abstract void SetSprite(int id);
+	public abstract void SetSprite(Sprite sprite);
+
 
 }

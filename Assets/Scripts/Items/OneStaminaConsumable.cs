@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class OneStaminaConsumable : Item
 {
-
 	private SpriteRenderer _spriteRenderer;
 
 	public Sprite[] Sprites;
     public AudioClip eatSound;
 
-	public override int SpriteId { get; set; }
+	public override Sprite ItemSprite { get; set; }
+
+	public override ItemType Type
+	{
+		get { return ItemType.OneStaminaConsumable; }
+		protected set { }
+	}
 
 	void Awake()
 	{
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 
-		SpriteId = Random.Range(0, Sprites.Length);
-		_spriteRenderer.sprite = Sprites[SpriteId];
+		ItemSprite = Sprites[Random.Range(0, Sprites.Length)];
+		_spriteRenderer.sprite = ItemSprite;
 	}
 
     private void OnMouseDown()
@@ -32,8 +37,8 @@ public class OneStaminaConsumable : Item
 	    Messenger<Item>.Broadcast("removeItem", this);
     }
 
-	public override void SetSprite(int id)
+	public override void SetSprite(Sprite sprite)
 	{
-		_spriteRenderer.sprite = Sprites[id];
+		_spriteRenderer.sprite = sprite;
 	}
 }

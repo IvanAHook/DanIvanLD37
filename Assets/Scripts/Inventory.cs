@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Inventory : MonoBehaviour
 {
 
-    public GameObject[] ItemSlot;
+	private const int ItemWidth = 1;
+
 	public Item[] AvaliableItems;
 
 	private List<Item> _items;
-
-	private List<int> _itemsAtStartOfDay;
+	private List<ItemData> _itemsAtStartOfDay;
 
 	private void Awake()
 	{
 		_items = new List<Item>();
-		_itemsAtStartOfDay = new List<int>();
+		_itemsAtStartOfDay = new List<ItemData>();
 	}
 
 	private void OnEnable()
@@ -24,62 +27,81 @@ public class Inventory : MonoBehaviour
 		Messenger.AddListener("resetItemsToLastDay", ResetToLastDayItems);
 	}
 
-	public void SetItems(Item[] items)
+	private Item GetItem(ItemType itemType)
 	{
-		for (int i = 0; i <items.Length; i++)
+		switch (itemType)
 		{
-			_items.Add(items[i]);
+			case ItemType.OneStaminaConsumable:
+				return AvaliableItems[0];
+			default:
+				throw new NotImplementedException("item type not found");
 		}
-
-        for(int i = 0; i < _items.Count; i++)
-        {
-            _items[i].transform.SetParent(transform);
-            _items[i].transform.position = ItemSlot[i].transform.position;
-        }
-
-		_itemsAtStartOfDay.Clear();
-		for (int i = 0; i < _items.Count; i++)
-		{
-			_itemsAtStartOfDay.Add(_items[i].SpriteId);
-		}
-	}
-
-	public void ResetToLastDayItems()
-	{
-		ClearItems();
-
-		var itemsList = new Item[_itemsAtStartOfDay.Count];
-
-		for (int i = 0; i < _itemsAtStartOfDay.Count; i++)
-		{
-			itemsList[i] = Instantiate(GetItem(0), new Vector2(-1000, -1000), Quaternion.identity);
-			itemsList[i].SetSprite(_itemsAtStartOfDay[i]);
-		}
-
-		SetItems(itemsList);
-	}
-
-	public Item GetItem(int i)
-	{
-		return AvaliableItems[i];
 	}
 
 	private void AquireItems()
 	{
 		var newItems = TurnManager.GetItemsForDay();
-		var itemsList = new Item[newItems.Length];
 
 		for (int i = 0; i < newItems.Length; i++)
 		{
-			itemsList[i] = Instantiate(GetItem(0), new Vector2(-1000, -1000), Quaternion.identity);
+			AddItem(newItems[i]);
 		}
-		SetItems(itemsList);
+
+		_itemsAtStartOfDay.Clear();
+		for (int i = 0; i < _items.Count; i++)
+		{
+			var itemData = new ItemData()
+			{
+				Type = _items[i].Type,
+				ItemSprite = _items[i].ItemSprite
+			};
+			_itemsAtStartOfDay.Add(itemData);
+		}
 	}
 
-	private void RemoveItem(Item item) // TODO implement and use message
+	private void ResetToLastDayItems()
+	{
+		ClearItems();
+
+		Debug.Log(_itemsAtStartOfDay.Count);
+
+		for (int i = 0; i < _itemsAtStartOfDay.Count; i++)
+		{
+			Debug.Log(_itemsAtStartOfDay[i].Type);
+			AddItem(_itemsAtStartOfDay[i].Type, _itemsAtStartOfDay[i].ItemSprite);
+		}
+
+		UpdateItemPositions();
+	}
+
+	private void AddItem(ItemType type, Sprite itemSprite = null)
+	{
+		var position = new Vector2(-1.5f + transform.position.x + _items.Count*ItemWidth, transform.position.y);
+		var item = Instantiate(GetItem(type), position, Quaternion.identity);
+		item.transform.SetParent(transform);
+
+		if (itemSprite != null)
+		{
+			item.SetSprite(itemSprite);
+		}
+
+		_items.Add(item);
+	}
+
+	private void UpdateItemPositions()
+	{
+		for (int i = 0; i < _items.Count; i++)
+		{
+			var position = new Vector2(-1.5f + transform.position.x + i*ItemWidth, transform.position.y);
+			_items[i].transform.position = position;
+		}
+	}
+
+	private void RemoveItem(Item item)
 	{
 		_items.Remove(item);
 		Destroy(item.gameObject);
+		UpdateItemPositions();
 	}
 
     private void ClearItems()
@@ -89,9 +111,21 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < _items.Count; i++)
         {
-		    DestroyImmediate(_items[i].gameObject);
+	        Destroy(_items[i].gameObject);
         }
 	    _items.Clear();
     }
 
+}
+
+public enum ItemType
+{
+	OneStaminaConsumable,
+
+}
+
+public struct ItemData
+{
+	public ItemType Type;
+	public Sprite ItemSprite;
 }

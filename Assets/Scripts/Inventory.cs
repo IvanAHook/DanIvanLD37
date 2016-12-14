@@ -44,7 +44,7 @@ public class Inventory : MonoBehaviour
 
 		for (int i = 0; i < newItems.Length; i++)
 		{
-			AddItem(newItems[i]);
+			AddItem(newItems[i].Type);
 		}
 
 		_itemsAtStartOfDay.Clear();

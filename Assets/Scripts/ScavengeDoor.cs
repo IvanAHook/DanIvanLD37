@@ -85,11 +85,11 @@ public class ScavengeDoor : InteractableItem
 			yield return new WaitForSeconds(0.01f);
 		}
 
-		a = 1;
+		a = 1.2f;
 		_fadeTextSpriteRenderer.sprite = DayNumberTextArray[TurnManager.CurrentDay - 1];
 		while (a > 0)
 		{
-			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
+			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, Mathf.Clamp01(a));
 
 			a -= _dayFadeSpeed;
 			yield return new WaitForSeconds(0.01f);
@@ -99,7 +99,6 @@ public class ScavengeDoor : InteractableItem
 		_fadeTextSpriteRenderer.enabled = false;
 		Fade.gameObject.SetActive(false);
 		audioSource.panStereo = p;
-
 	}
 
 	private void SetFadeMessage()

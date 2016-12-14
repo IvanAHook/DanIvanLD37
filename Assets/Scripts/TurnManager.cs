@@ -53,26 +53,28 @@ public static class TurnManager
 		}
 	}
 
-	public static ItemType[] GetItemsForDay()
+	public static ItemData[] GetItemsForDay()
 	{
-		ItemType[] items = new ItemType[4];
+		ItemData[] items = new ItemData[4];
 
 		switch (CurrentDay)
 		{
 			case 0:
-				items = new ItemType[] {ItemType.OneStaminaConsumable};
+				items = new ItemData[] {new ItemData(){ Type = ItemType.OneStaminaConsumable }};
 				break;
 			case 1:
-				items = new ItemType[1] {ItemType.OneStaminaConsumable};
+				items = new ItemData[1] {new ItemData(){ Type = ItemType.OneStaminaConsumable }};
 				break;
 			case 2:
-				items = new ItemType[3] {ItemType.OneStaminaConsumable, ItemType.OneStaminaConsumable, ItemType.OneStaminaConsumable};
+				items = new ItemData[3] {new ItemData(){ Type = ItemType.OneStaminaConsumable },
+											new ItemData(){ Type = ItemType.OneStaminaConsumable },
+											new ItemData(){ Type = ItemType.OneStaminaConsumable }};
 				break;
 			case 3:
-				items = new ItemType[1] {ItemType.OneStaminaConsumable};
+				items = new ItemData[1] {new ItemData(){ Type = ItemType.OneStaminaConsumable }};
 				break;
 			case 4:
-				items = new ItemType[1] {ItemType.OneStaminaConsumable};
+				items = new ItemData[1] {new ItemData(){ Type = ItemType.OneStaminaConsumable }};
 				break;
 		}
 

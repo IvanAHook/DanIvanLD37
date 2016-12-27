@@ -29,6 +29,8 @@ public class PlayerCharacter : MonoBehaviour
 		_speechBubble = GetComponent<SpeechBubble>();
 	    _characterSound = GetComponent<CharacterSound>();
 	    _blockInput = false;
+
+		Messenger<InputType>.AddListener("PlayerInput", PlayerInput);
 	}
 
 
@@ -79,11 +81,29 @@ public class PlayerCharacter : MonoBehaviour
 	    {
 		    Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 	    }
+	}
 
-		if (Input.GetMouseButtonDown(0))
+	private void PlayerInput(InputType inputType)
+	{
+		switch (inputType)
 		{
-			if (hit.collider != null && hit.collider.tag == "Interactable")
-			{
+			case InputType.Mouse0:
+				CheckRayCastHit();
+				break;
+			case InputType.Mouse1:
+				break;
+			default:
+				throw new NotImplementedException("Invalid input type...");
+		}
+	}
+
+	private void CheckRayCastHit()
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction, Mathf.Infinity);
+
+		if (hit.collider != null && hit.collider.tag == "Interactable")
+		{
 
 //				if (TurnManager.Stamina < 1)
 //				{
@@ -91,24 +111,23 @@ public class PlayerCharacter : MonoBehaviour
 //					return;
 //				}
 
-				StopAllCoroutines();
-				StartCoroutine(MoveTo(hit.transform.position, () =>
-				{
-					if (hit.collider.GetComponent<InteractableItem>() != null)
-					{
-						hit.collider.GetComponent<InteractableItem>().Interract();
-					}
-					if (hit.collider.GetComponent<ScavengeDoor>() != null)
-					{
-						StartCoroutine(MoveToBed());
-					}
-					//TurnManager.SpendTurn();
-				}));
-			}
-			if (hit.collider != null && hit.collider.tag == "Scavenge")
+			StopAllCoroutines();
+			StartCoroutine(MoveTo(hit.transform.position, () =>
 			{
+				if (hit.collider.GetComponent<InteractableItem>() != null)
+				{
+					hit.collider.GetComponent<InteractableItem>().Interract();
+				}
+				if (hit.collider.GetComponent<ScavengeDoor>() != null)
+				{
+					StartCoroutine(MoveToBed());
+				}
+				//TurnManager.SpendTurn();
+			}));
+		}
+		if (hit.collider != null && hit.collider.tag == "Scavenge")
+		{
 
-			}
 		}
 	}
 

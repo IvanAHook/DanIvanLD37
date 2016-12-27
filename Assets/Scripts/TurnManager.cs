@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Permissions;
 using UnityEngine;
 
 public static class TurnManager
 {
 	public const int MaxTurns = 8;
-	public static int Stamina { get; private set; }
 	private static int _staminaAtStartOfDay;
 
 	public static int CurrentDay { get; private set; }
+	public static int Stamina { get; private set; }
+	public static bool Death { get { return Stamina - 4 < 0; } }
 
 	public static void Initialize()
 	{
@@ -25,7 +27,7 @@ public static class TurnManager
 	public static void NextDay()
 	{
 		CurrentDay += 1;
-		//Messenger.Broadcast("newDay");
+		Messenger.Broadcast("NewDay");
 		InitializeDay();
 	}
 

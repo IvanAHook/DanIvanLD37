@@ -22,6 +22,12 @@ public class ScavengeDoor : InteractableItem
 	private float _dayFadeSpeed = 0.005f;
 	private SpriteRenderer _fadeSpriteRenderer;
 	private SpriteRenderer _fadeTextSpriteRenderer;
+	private AudioSource _audioSource;
+
+	private void Awake()
+	{
+		_audioSource = GetComponent<AudioSource>();
+	}
 
 	public override void Interract()
 	{
@@ -32,8 +38,7 @@ public class ScavengeDoor : InteractableItem
 
 	private IEnumerator SmoothFade( )
 	{
-	    var audioSource = GetComponent<AudioSource>();
-	    audioSource.Play();
+		_audioSource.Play();
 	    var a = 0f;
 		var color = _fadeSpriteRenderer.color;
 		var textColor = _fadeTextSpriteRenderer.color;
@@ -59,17 +64,17 @@ public class ScavengeDoor : InteractableItem
 
 	    Messenger.Broadcast("KillRadio");
 
-		var p = audioSource.panStereo;
-	    audioSource.panStereo = 0;
+		var p = _audioSource.panStereo;
+		_audioSource.panStereo = 0;
 
 		if (TurnManager.Stamina - 4 < 0)
 	    {
-	        audioSource.PlayOneShot(deathMusic, 3f);
+		    _audioSource.PlayOneShot(deathMusic, 3f);
 		    TurnManager.ResetToLastDay();
 	    }
 	    else
 	    {
-	        audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
+		    _audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
 		    TurnManager.NextDay();
 
 	    }
@@ -98,7 +103,7 @@ public class ScavengeDoor : InteractableItem
 
 		_fadeTextSpriteRenderer.enabled = false;
 		Fade.gameObject.SetActive(false);
-		audioSource.panStereo = p;
+		_audioSource.panStereo = p;
 	}
 
 	private void SetFadeMessage()

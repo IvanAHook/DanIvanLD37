@@ -9,10 +9,21 @@ public class Diary : MonoBehaviour
 	private void Awake()
 	{
 		_spriteRenderer = GetComponent<SpriteRenderer>();
+		Messenger.AddListener("NewDay", UpdateDiary);
+		UpdateDiary();
 	}
 
-	public void UpdateDiary()
+	private void UpdateDiary()
 	{
+		if (_spriteRenderer == null)
+		{
+			_spriteRenderer = GetComponent<SpriteRenderer>();
+		}
+
+		if (DiaryEntries.Length < TurnManager.CurrentDay)
+		{
+			_spriteRenderer.sprite = null;
+		}
 		_spriteRenderer.sprite = DiaryEntries[TurnManager.CurrentDay];
 	}
 

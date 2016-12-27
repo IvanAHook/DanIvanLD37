@@ -11,18 +11,10 @@ public class CharacterSound : MonoBehaviour
     private AudioSource _audioSource;
     public AudioSource nonDiegeticSource;
 
-
-	// Use this for initialization
 	void Start ()
 	{
 	    _audioSource = GetComponent<AudioSource>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 
     private void OnEnable()
     {

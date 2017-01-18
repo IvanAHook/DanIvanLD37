@@ -118,12 +118,6 @@ public class Inventory : MonoBehaviour
 
 }
 
-public enum ItemType
-{
-	OneStaminaConsumable,
-
-}
-
 public struct ItemData
 {
 	public ItemType Type;

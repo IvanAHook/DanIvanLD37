@@ -16,6 +16,7 @@ public class Diary : InteractableItem
 			DisplayItem.gameObject.SetActive(true);
 			UpdateDiary();
 		}
+
 	}
 
 	private void UpdateDiary()

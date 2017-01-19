@@ -48,15 +48,13 @@ public class ScavengeDoor : InteractableItem
 
 		yield return new WaitForSeconds(0.2f);
 
-
 		yield return StartCoroutine(FadeIn(color, textColor));
 
-	    PlayTransitionSFX();
+	    StartTransitionSFX();
 
 	    yield return new WaitForSeconds(6f);
 
 		yield return StartCoroutine(FadeOut(color, textColor));
-
 
 		yield return StartCoroutine(DayText(textColor));
 
@@ -66,7 +64,7 @@ public class ScavengeDoor : InteractableItem
 		_audioSource.panStereo = p;
 	}
 
-    private void PlayTransitionSFX()
+    private void StartTransitionSFX()
     {
 		_audioSource.panStereo = 0;
 

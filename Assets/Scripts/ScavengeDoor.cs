@@ -13,10 +13,10 @@ public class ScavengeDoor : InteractableItem
 
 	public Sprite[] DayNumberTextArray;
 
-	public AudioMixerSnapshot roomSnapshot;
-    public AudioMixerSnapshot transitionSnapshot;
-    public AudioClip[] transitions;
-    public AudioClip deathMusic;
+	public AudioMixerSnapshot RoomSnapshot;
+    public AudioMixerSnapshot TransitionSnapshot;
+    public AudioClip[] Transitions;
+    public AudioClip DeathMusic;
 
 	private float _fadeSpeed = 0.01f;
 	private float _dayFadeSpeed = 0.005f;
@@ -39,66 +39,39 @@ public class ScavengeDoor : InteractableItem
 	private IEnumerator SmoothFade( )
 	{
 		_audioSource.Play();
-	    var a = 0f;
 		var color = _fadeSpriteRenderer.color;
 		var textColor = _fadeTextSpriteRenderer.color;
 
-		_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
+		_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, 0);
 	    Fade.gameObject.SetActive(true);
 
 		yield return new WaitForSeconds(0.2f);
 
-        transitionSnapshot.TransitionTo(3f);
+        TransitionSnapshot.TransitionTo(3f);
 
-		while (a < 1)
-		{
-
-			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-			a += _fadeSpeed;
-			yield return new WaitForSeconds(0.01f);
-		}
-
-		SetFadeMessage();
-		_fadeTextSpriteRenderer.enabled = true;
-		_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, 1);
-
-	    Messenger.Broadcast("KillRadio");
+		yield return StartCoroutine(FadeIn(color, textColor));
 
 		var p = _audioSource.panStereo;
 		_audioSource.panStereo = 0;
 
 		if (TurnManager.Stamina - 4 < 0)
 	    {
-		    _audioSource.PlayOneShot(deathMusic, 3f);
+		    _audioSource.PlayOneShot(DeathMusic, 3f);
 		    TurnManager.ResetToLastDay();
 	    }
 	    else
 	    {
-		    _audioSource.PlayOneShot(transitions[Random.Range(0,transitions.Length-1)], 3f);
+		    _audioSource.PlayOneShot(Transitions[Random.Range(0,Transitions.Length-1)], 3f);
 		    TurnManager.NextDay();
 
 	    }
 	    yield return new WaitForSeconds(6f);
-	    roomSnapshot.TransitionTo(2f);
+	    RoomSnapshot.TransitionTo(2f);
 
-		while (a > 0)
-		{
-			_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, a);
-			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, a);
+		yield return StartCoroutine(FadeOut(color, textColor));
 
-			a -= _fadeSpeed;
-			yield return new WaitForSeconds(0.01f);
-		}
 
-		a = 1.2f;
-		_fadeTextSpriteRenderer.sprite = DayNumberTextArray[TurnManager.CurrentDay - 1];
-		while (a > 0)
-		{
-			_fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, Mathf.Clamp01(a));
-
-			a -= _dayFadeSpeed;
-			yield return new WaitForSeconds(0.01f);
-		}
+		yield return StartCoroutine(DayText(textColor));
 
 
 		_fadeTextSpriteRenderer.enabled = false;
@@ -106,7 +79,53 @@ public class ScavengeDoor : InteractableItem
 		_audioSource.panStereo = p;
 	}
 
-	private void SetFadeMessage()
+    private IEnumerator FadeIn(Color color, Color textColor)
+    {
+        var duration = 0f;
+        while (duration < 1)
+        {
+
+            _fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, duration);
+            duration += _fadeSpeed;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        SetFadeMessage();
+        _fadeTextSpriteRenderer.enabled = true;
+        _fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, 1);
+        Messenger.Broadcast("KillRadio");
+    }
+
+    private IEnumerator FadeOut(Color color, Color textColor)
+    {
+        var duration = 1f;
+        while (duration > 0)
+        {
+            _fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, duration);
+            _fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, duration);
+
+            duration -= _fadeSpeed;
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
+    private IEnumerator DayText(Color textColor)
+    {
+        var duration = 1.2f;
+        _fadeTextSpriteRenderer.sprite = DayNumberTextArray[TurnManager.CurrentDay - 1];
+        while (duration > 0)
+        {
+            _fadeTextSpriteRenderer.color = new Color(textColor.r, textColor.g, textColor.b, Mathf.Clamp01(duration));
+
+            duration -= _dayFadeSpeed;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+
+        _fadeTextSpriteRenderer.enabled = false;
+    }
+
+    private void SetFadeMessage()
 	{
 		if (TurnManager.Stamina < 4)
 		{

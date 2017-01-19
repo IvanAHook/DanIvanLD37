@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -50,10 +49,11 @@ public class Inventory : MonoBehaviour
 		_itemsAtStartOfDay.Clear();
 		for (int i = 0; i < _items.Count; i++)
 		{
+			Debug.Log(_items[i].Data.Type);
 			var itemData = new ItemData()
 			{
-				Type = _items[i].Type,
-				ItemSprite = _items[i].ItemSprite
+				Type = _items[i].Data.Type,
+				ItemSprite = _items[i].Data.ItemSprite
 			};
 			_itemsAtStartOfDay.Add(itemData);
 		}
@@ -71,37 +71,38 @@ public class Inventory : MonoBehaviour
 			AddItem(_itemsAtStartOfDay[i].Type, _itemsAtStartOfDay[i].ItemSprite);
 		}
 
-		UpdateItemPositions();
+		//UpdateItemPositions();
 	}
 
 	private void AddItem(ItemType type, Sprite itemSprite = null)
 	{
-		var position = new Vector2(-1.5f + transform.position.x + _items.Count*ItemWidth, transform.position.y);
-		var item = Instantiate(GetItem(type), position, Quaternion.identity);
-		item.transform.SetParent(transform);
+		var item = Instantiate(GetItem(type), Vector3.zero, Quaternion.identity);
+		item.transform.SetParent(transform.FindChild("Panel"));
+
+		item.Create();
 
 		if (itemSprite != null)
 		{
-			item.SetSprite(itemSprite);
+			item.SetSprite(itemSprite); // resources load same spritename as itemType?
 		}
 
 		_items.Add(item);
 	}
 
-	private void UpdateItemPositions()
-	{
-		for (int i = 0; i < _items.Count; i++)
-		{
-			var position = new Vector2(-1.5f + transform.position.x + i*ItemWidth, transform.position.y);
-			_items[i].transform.position = position;
-		}
-	}
+//	private void UpdateItemPositions()
+//	{
+//		for (int i = 0; i < _items.Count; i++)
+//		{
+//			var position = new Vector2(-1.5f + transform.position.x + i*ItemWidth, transform.position.y);
+//			_items[i].transform.position = position;
+//		}
+//	}
 
 	private void RemoveItem(Item item)
 	{
 		_items.Remove(item);
 		Destroy(item.gameObject);
-		UpdateItemPositions();
+		//UpdateItemPositions();
 	}
 
     private void ClearItems()
@@ -116,10 +117,4 @@ public class Inventory : MonoBehaviour
 	    _items.Clear();
     }
 
-}
-
-public struct ItemData
-{
-	public ItemType Type;
-	public Sprite ItemSprite;
 }

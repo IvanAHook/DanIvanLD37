@@ -67,15 +67,16 @@ public class ScavengeDoor : InteractableItem
     private void StartTransitionSFX()
     {
 		_audioSource.panStereo = 0;
+        var volumeScale = 3f;
 
 		if (TurnManager.Stamina - 4 < 0)
 	    {
-		    _audioSource.PlayOneShot(DeathMusic, 3f);
+		    _audioSource.PlayOneShot(DeathMusic, volumeScale);
 		    TurnManager.ResetToLastDay();
 	    }
 	    else
 	    {
-		    _audioSource.PlayOneShot(Transitions[Random.Range(0,Transitions.Length-1)], 3f);
+		    _audioSource.PlayOneShot(Transitions[Random.Range(0,Transitions.Length-1)], volumeScale);
 		    TurnManager.NextDay();
 	    }
     }

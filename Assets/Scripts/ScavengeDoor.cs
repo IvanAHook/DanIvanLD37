@@ -41,32 +41,19 @@ public class ScavengeDoor : InteractableItem
 		_audioSource.Play();
 		var color = _fadeSpriteRenderer.color;
 		var textColor = _fadeTextSpriteRenderer.color;
+	    var p = _audioSource.panStereo;
 
-		_fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, 0);
+	    _fadeSpriteRenderer.color = new Color(color.r, color.g, color.b, 0);
 	    Fade.gameObject.SetActive(true);
 
 		yield return new WaitForSeconds(0.2f);
 
-        TransitionSnapshot.TransitionTo(3f);
 
 		yield return StartCoroutine(FadeIn(color, textColor));
 
-		var p = _audioSource.panStereo;
-		_audioSource.panStereo = 0;
+	    PlayTransitionSFX();
 
-		if (TurnManager.Stamina - 4 < 0)
-	    {
-		    _audioSource.PlayOneShot(DeathMusic, 3f);
-		    TurnManager.ResetToLastDay();
-	    }
-	    else
-	    {
-		    _audioSource.PlayOneShot(Transitions[Random.Range(0,Transitions.Length-1)], 3f);
-		    TurnManager.NextDay();
-
-	    }
 	    yield return new WaitForSeconds(6f);
-	    RoomSnapshot.TransitionTo(2f);
 
 		yield return StartCoroutine(FadeOut(color, textColor));
 
@@ -79,8 +66,26 @@ public class ScavengeDoor : InteractableItem
 		_audioSource.panStereo = p;
 	}
 
+    private void PlayTransitionSFX()
+    {
+		_audioSource.panStereo = 0;
+
+		if (TurnManager.Stamina - 4 < 0)
+	    {
+		    _audioSource.PlayOneShot(DeathMusic, 3f);
+		    TurnManager.ResetToLastDay();
+	    }
+	    else
+	    {
+		    _audioSource.PlayOneShot(Transitions[Random.Range(0,Transitions.Length-1)], 3f);
+		    TurnManager.NextDay();
+	    }
+    }
+
     private IEnumerator FadeIn(Color color, Color textColor)
     {
+        TransitionSnapshot.TransitionTo(3f);
+
         var duration = 0f;
         while (duration < 1)
         {
@@ -98,6 +103,8 @@ public class ScavengeDoor : InteractableItem
 
     private IEnumerator FadeOut(Color color, Color textColor)
     {
+        RoomSnapshot.TransitionTo(2f);
+
         var duration = 1f;
         while (duration > 0)
         {

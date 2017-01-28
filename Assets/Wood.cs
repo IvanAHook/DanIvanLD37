@@ -4,7 +4,7 @@ public class Wood : MonoBehaviour
 {
 
     public Sprite[] WoodSprites;
-    private int _logs = 1;
+    private int _logs = 3;
     public int LogCount
     {
         get { return _logs; }
@@ -25,8 +25,10 @@ public class Wood : MonoBehaviour
             GetComponent<SpriteRenderer>().enabled = false;
             TurnManager.newDayCallback -= DecrementWoodCount;
         }
-        GetComponent<SpriteRenderer>().sprite = WoodSprites[_logs - 1];
-
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = WoodSprites[_logs - 1];
+        }
         Debug.Log("LOGS: " + _logs);
     }
 	

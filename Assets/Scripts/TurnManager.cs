@@ -49,7 +49,7 @@ public static class TurnManager
 		}
 		else
 		{
-			Stamina -= 4;
+		//	Stamina -= 4;
 		}
 
 		_staminaAtStartOfDay = Stamina;

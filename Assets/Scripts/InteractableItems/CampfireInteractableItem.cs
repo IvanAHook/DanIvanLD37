@@ -3,11 +3,13 @@
 public class CampfireInteractableItem : InteractableItem
 {
 
-    public Wood wood;
+    public Wood Wood;
+    public GameObject FauxLight;
+    public GameObject Particles;
 
     private void Start()
     {
-        wood = FindObjectOfType<Wood>();
+        Wood = FindObjectOfType<Wood>();
         TurnManager.newDayCallback += NewDay;
     }
 
@@ -17,9 +19,11 @@ public class CampfireInteractableItem : InteractableItem
 
     private void NewDay()
     {
-        if (wood.LogCount == 0)
+        if (Wood.LogCount == 0)
         {
-            // TODO: hide fire
+            GetComponent<SpriteRenderer>().enabled = false;
+            FauxLight.gameObject.SetActive(false);
+            Particles.gameObject.SetActive(false);
         }
     }
 }

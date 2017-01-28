@@ -6,6 +6,10 @@ using UnityEngine;
 
 public static class TurnManager
 {
+    public delegate void NewDayCallBack();
+
+    public static NewDayCallBack newDayCallback;
+
 	public const int MaxTurns = 8;
 	private static int _staminaAtStartOfDay;
 
@@ -27,6 +31,7 @@ public static class TurnManager
 	public static void NextDay()
 	{
 		CurrentDay += 1;
+	    newDayCallback();
 		InitializeDay();
 	}
 

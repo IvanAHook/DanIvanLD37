@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class Inventory : MonoBehaviour
 {
+    protected Inventory(){}  // Gör konstruktorn protected så inte fler kan skapas utifrån
 
-	private const int ItemWidth = 1;
+    private static Inventory _instance;
+    public static Inventory Instance
+    {
+        get
+        {
+            if (_instance == null)
+                _instance = GameObject.FindObjectOfType<Inventory>();
+            return _instance;
+        }
+    }
+
+    private const int ItemWidth = 1;
 
 	public Item[] AvaliableItems;
 
@@ -15,6 +28,7 @@ public class Inventory : MonoBehaviour
 
 	private void Awake()
 	{
+	    _instance = this;
 		_items = new List<Item>();
 		_itemsAtStartOfDay = new List<ItemData>();
 	}
@@ -74,7 +88,7 @@ public class Inventory : MonoBehaviour
 		//UpdateItemPositions();
 	}
 
-	private void AddItem(ItemType type, Sprite itemSprite = null)
+	public void AddItem(ItemType type, Sprite itemSprite = null)
 	{
 		var item = Instantiate(GetItem(type), Vector3.zero, Quaternion.identity);
 		item.transform.SetParent(transform.FindChild("Panel"));

@@ -17,6 +17,7 @@ public class CampfireInteractableItem : InteractableItem
 
 	public override void Interract()
 	{
+	    Debug.Log("Playing with fiyyaahhh");
 	}
 
     private void NewDay()

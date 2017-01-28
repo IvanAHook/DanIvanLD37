@@ -5,7 +5,7 @@ public class GrabbableItem : InteractableItem
 
     public ItemType PickedUpItem;
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start () {
 	}
 	

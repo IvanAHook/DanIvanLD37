@@ -6,11 +6,13 @@ public class CampfireInteractableItem : InteractableItem
     public Wood Wood;
     public GameObject FauxLight;
     public GameObject Particles;
+    public Sprite CampFireBase;
 
     private void Start()
     {
         Wood = FindObjectOfType<Wood>();
         TurnManager.newDayCallback += NewDay;
+        GetComponent<Animator>().SetBool("Fire", true);
     }
 
 	public override void Interract()
@@ -21,9 +23,20 @@ public class CampfireInteractableItem : InteractableItem
     {
         if (Wood.LogCount == 0)
         {
-            GetComponent<SpriteRenderer>().enabled = false;
-            FauxLight.gameObject.SetActive(false);
-            Particles.gameObject.SetActive(false);
+            KillFire();
         }
+    }
+
+    private void KillFire()
+    {
+        GetComponent<Animator>().SetBool("Fire", false);
+        FauxLight.gameObject.SetActive(false);
+        Particles.gameObject.SetActive(false);
+        GetComponent<AudioSource>().enabled = false;
+    }
+
+    private void StartFire()
+    {
+        //TODO
     }
 }
